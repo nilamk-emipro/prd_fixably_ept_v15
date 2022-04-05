@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="fixably_instance_tree_view_ept" model="ir.ui.view">
+        <field name="name">Fixably Instance</field>
+        <field name="model">fixably.instance.ept</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="fixably_url"/>
+                <field name="fixably_company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="fixably_instance_form_view_ept" model="ir.ui.view">
+        <field name="name">Fixably Instance</field>
+        <field name="model">fixably.instance.ept</field>
+        <field name="arch" type="xml">
+            <form string="Fixably Instance">
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_left" style="width: 500px;">
+                        <div class="oe_title" style="width: 390px;">
+                            <label class="oe_edit_only" for="name" string="Name"/>
+                            <h1>
+                                <field name="name" class="oe_inline"/>
+                            </h1>
+                        </div>
+                    </div>
+                    <group string="Configuration">
+                        <group>
+                            <field name="fixably_company_id" widget="selection"
+                                   readonly="1" groups="base.group_multi_company"/>
+                            <field name="fixably_warehouse_id" required="1"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="fixably Site Info">
+                        <group>
+                            <field name="fixably_url"
+                                   attrs="{'readonly': [('active','=',True)]}"/>
+                        </group>
+                        <group>
+                            <field name="fixably_api_key"
+                                   attrs="{'readonly': [('active','=',True)]}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Last Operation Details"
+                              name="last_operation_detail">
+                            <group>
+                                <group>
+                                    <field name="last_order_import_date" readonly="1"/>
+                                    <field name="fixably_pricelist_id" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="fixably_instance_search_view_ept"
+            model="ir.ui.view">
+        <field name="name">Fixably Instance Search View</field>
+        <field name="model">fixably.instance.ept</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Fixably Instance">
+                <field name="name"/>
+                <filter name="archive" string="Archived" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group By...">
+                    <filter name="warehouse" string="Warehouse"
+                            icon="terp-personal"
+                            context="{'group_by':'fixably_warehouse_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_fixably_instance_ept"
+            model="ir.actions.act_window">
+        <field name="name">Fixably Instance</field>
+        <field name="res_model">fixably.instance.ept</field>
+        <field name="view_id" ref="fixably_instance_tree_view_ept"/>
+        <field name="help" type="html">
+            <div class="oe_empty_fixably_instance">
+                <p class="o_view_nocontent_smiling_face">
+                    <b>There is no any fixably Instance configured yet.</b>
+                </p>
+                <p>
+                    To add your first fixably Instance, go to Configuration menu and
+                    then open Settings, you can create new Instance from there. At
+                    there you can define one or more fixably Instances and configure
+                    extended options per Instance test.
+                </p>
+            </div>
+        </field>
+    </record>
+
+    <menuitem id="fixably_instance_menu_item" name="Fixably"/>
+
+    <menuitem id="menu_configuration_ept" name="Configuration"
+              parent="fixably_instance_menu_item"/>
+
+    <menuitem id="fixably_instance_menu_item_instance" sequence="2"
+              name="Instances" parent="fixably_ept.menu_configuration_ept"
+              action="action_fixably_instance_ept"/>
+</odoo>
